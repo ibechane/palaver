@@ -14,23 +14,44 @@
 //
 // ============================================================================
 
+template<typename T>
 typedef struct element {
-    void *key;
-    void *prev;
-    void *next;
+    T *key;
+    element *prev;
+    T *next;
 } element;
 
-typedef struct list {
-    void *head = nullptr;
-    element x;
+template<typename T>
+typedef struct stack {
+    stack() {}
+    ~stack() {}
 
-    // search();
-    // delete();
-    // insert();
-} list;
+    element *head = NULL;
+    void push(T key) {
+        element x {key, head, NULL};
+
+        head->next = x;
+        head = &x;
+    }
+
+    // T pop(T key) {}
+} stack;
+
+// template<typename T>
+// typedef struct list {
+//     list() {}
+//     ~list() {}
+//
+//     T *head = NULL;
+//
+//     // element search(T *key) {}
+//
+//     // void delete(element x) {}
+//     // void insert(element x) {}
+// } list;
 
 int main(void)
 {
-    list l;
+    stack S;
     return 0;
 }
