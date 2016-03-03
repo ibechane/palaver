@@ -1,18 +1,20 @@
-// ============================================================================
-//
-//       Filename:  lists.c
-//
-//    Description:
-//
-//        Version:  1.0
-//        Created:  03/02/2016 17:03:58
-//       Revision:  none
-//       Compiler:  clang
-//
-//         Author:  Matthew Harrigan (mj), git@mjharrigan.com
-//   Organization:
-//
-// ============================================================================
+/*
+ * ============================================================================
+ *
+ *       Filename:  lists.c
+ *
+ *    Description:
+ *
+ *        Version:  1.0
+ *        Created:  03/02/2016 17:03:58
+ *       Revision:  none
+ *       Compiler:  clang
+ *
+ *         Author:  Matthew Harrigan (mj), git@mjharrigan.com
+ *   Organization:
+ *
+ * ============================================================================
+ */
 
 #include<stdlib.h>
 #include<stdio.h>
@@ -30,16 +32,14 @@ typedef struct stack {
 } stack;
 
 void push(stack* s, int key) {
-    element *x = (element *) malloc(1);
+    element *x = (element *) malloc(sizeof(element));
 
     x->key = key;
     x->prev = NULL;
+    x->next = s->head;
 
-    if (s->head) {
-        x->next = s->head;
-    } else {
-        x->next = NULL;
-    }
+    if (s->head)
+        s->head->prev = x;
 
     s->head = x;
 }
@@ -48,37 +48,30 @@ int pop(stack* s) {
     if (!s->head)
         exit(1);
 
-    element *x = s->head;
+    int key = s->head->key;
 
-    int key = x->key;
-
-    if (x->next) {
-        s->head = x->next;
+    if (s->head->next) {
+        s->head = s->head->next;
+        free(s->head->prev);
         s->head->prev = NULL;
+    } else {
+        free(s->head);
+        s->head = NULL;
     }
-
-    // free(x);
 
     return key;
 }
-
+ 
 int main(void)
 {
     stack S;
     S.head = NULL;
 
-    for (int i=0; i!=10; ++i) {
+    for (int i=0; i!=10; ++i)
         push(&S, i);
+
+    for (int i=0; i!=10; ++i)
         printf("%d\n", pop(&S));
-    }
-
-    push(&S, 0);
-    push(&S, 1);
-    push(&S, 2);
-
-    printf("%d\n", pop(&S));
-    printf("%d\n", pop(&S));
-    printf("%d\n", pop(&S));
 
     return 0;
 }
