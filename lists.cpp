@@ -5,7 +5,7 @@
 //    Description:
 //
 //        Version:  1.0
-//        Created:  03/02/2016 17:03:58
+//        Created:  03/03/2016 15:47:57
 //       Revision:  none
 //       Compiler:  clang++ -std=c++14
 //
@@ -14,44 +14,62 @@
 //
 // ============================================================================
 
-template<typename T>
-typedef struct element {
-    T *key;
-    element *prev;
-    T *next;
-} element;
+#include<iostream>
+
+using namespace std;
 
 template<typename T>
-typedef struct stack {
-    stack() {}
-    ~stack() {}
+struct element {
+    T key = 0;
+    element<T> *prev;
+    element<T> *next;
+};
 
-    element *head = NULL;
-    void push(T key) {
-        element x {key, head, NULL};
+template<typename T>
+struct stack {
+    element<T> *head = nullptr;
 
-        head->next = x;
-        head = &x;
+    void push(T k) {
+        element<T> *x = new element<T>;
+
+        x->key = k;
+        x->prev = nullptr;
+        x->next = this->head;
+
+        if (this->head)
+            this->head->prev = x;
+
+        this->head = x;
     }
 
-    // T pop(T key) {}
-} stack;
+    T pop(void) {
+        if (!this->head)
+            throw "Stack is empty.";
 
-// template<typename T>
-// typedef struct list {
-//     list() {}
-//     ~list() {}
-//
-//     T *head = NULL;
-//
-//     // element search(T *key) {}
-//
-//     // void delete(element x) {}
-//     // void insert(element x) {}
-// } list;
+        T k = this->head->key;
+
+        if (this->head->next) {
+            this->head = this->head->next;
+            delete[] this->head->prev;
+            this->head->prev = nullptr;
+        } else {
+            delete[] this->head;
+            this->head = nullptr;
+        }
+
+        return k;
+    }
+};
 
 int main(void)
 {
-    stack S;
+    stack<int> S;
+
+    for (int i=0; i!=10; ++i)
+        S.push(i);
+
+     for (int i=0; i!=10; ++i)
+        cout << S.pop() << endl;
+
     return 0;
 }
