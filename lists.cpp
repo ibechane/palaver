@@ -15,6 +15,7 @@
 // ============================================================================
 
 #include<iostream>
+#include <initializer_list>
 
 using namespace std;
 
@@ -25,9 +26,28 @@ struct element {
     element<T> *next;
 };
 
+// template<typename T>
+// struct list {
+//     element<T> *elem = nullptr;
+//     element<T> *elem = nullptr;
+// 
+//     insert;
+//     search;
+//     delete;
+// };
+
 template<typename T>
 struct stack {
     element<T> *head = nullptr;
+
+    stack() {}
+
+    stack(std::initializer_list<T> args) {
+        for (const auto& arg : args)
+            this->push(arg);
+    }
+
+    virtual ~stack() = default;  // TODO: Add full dealloc.
 
     void push(T k) {
         element<T> *x = new element<T>;
@@ -61,12 +81,12 @@ struct stack {
     }
 };
 
-int main(void)
+int main(int argc, char *argv[])
 {
-    stack<int> S;
+    stack<int> S {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-    for (int i=0; i!=10; ++i)
-        S.push(i);
+    // for (int i=0; i!=10; ++i)
+    //     S.push(i);
 
      for (int i=0; i!=10; ++i)
         cout << S.pop() << endl;
