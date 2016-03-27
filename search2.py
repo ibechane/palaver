@@ -13,9 +13,11 @@ def find_paths(src, target):
         path = []
         for i in xrange(len(src)):
             path.append(src[i])  # append a digit
-            if i < len(insert):
-                operation = inserts[int(insert[i])]
-                path.append(operation)
+            try:
+                operation = inserts[int(insert[i])]  # use digit of base-changed number as index of operation
+            except IndexError:  # there will always be one fewer operation than digits
+                operation = ''
+            path.append(operation)
         path = ''.join(path)
         result = evaluate_sequentially(path)
         # print("%s = %s" % (path, result))
@@ -39,9 +41,9 @@ def change_base(num, base):
 
 
 def evaluate_sequentially(path):
-    """ Takes a mathematical expression without parens and performs the operations sequentially, 
+    """ Takes a mathematical expression without parens and performs the operations sequentially,
         ignoring normal order of operations """
-    ops = re.findall(r'\W?\d+', path)  # returns operation pieces, e.g. ['3', '*1', '/41']
+    ops = re.findall(r'\W*\d+', path)  # returns operation pieces, e.g. ['3', '*1', '/41']
     result = ops[0]
     for op in ops[1:]:
         try:
