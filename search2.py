@@ -32,7 +32,7 @@ def change_base(num, base):
     if base > 10 or base < 2 or type(base) is not int:
         raise Exception("Only supports integer bases from 2 - 10")
     if base == 10:
-        return num
+        return str(num)
     digits = []
     while num != 0:
         digits.append(num % base)
